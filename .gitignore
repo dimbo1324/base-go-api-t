@@ -1,0 +1,456 @@
+# -------------------------
+# ОС / файловая система
+# -------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+.AppleDB
+.AppleDesktop
+.NetworkTrashFolder
+.Trashes
+.apdisk
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# -------------------------
+# Резервные/временные файлы редакторов
+# -------------------------
+# Vim
+*.swp
+*.swo
+.*.sw?
+*~ 
+# Emacs
+*~
+\#*\#
+.#*
+# Nano
+.nanorc
+# Sublime
+*.sublime-project
+*.sublime-workspace
+# VS Code
+.vscode/
+.vscode-test/
+# JetBrains (GoLand, PyCharm, IntelliJ)
+.idea/
+# Eclipse/Java
+.project
+.classpath
+.settings/
+# Atom
+.atom/
+# Other
+*.sublime-settings
+*.komodoproject
+*.kate-swp
+
+# -------------------------
+# Логи, pid, tmp
+# -------------------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pids/
+*.pid
+*.seed
+*.pid.lock
+*.gz
+*.zip
+
+# -------------------------
+# Бинарники / собранные артефакты
+# -------------------------
+# Общие
+*.exe
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.a
+*.lib
+*.class
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.ipch
+*.class
+*.jar
+*.war
+*.ear
+*.psd
+*.gem
+*.swf
+
+# Архивы / пакеты
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# -------------------------
+# Node / frontend (если в проекте есть)
+# -------------------------
+node_modules/
+npm-debug.log
+yarn-error.log
+.pnp
+.pnp.js
+# lockfiles можно оставить/удалить по желанию
+# package-lock.json
+# yarn.lock
+
+# -------------------------
+# Docker / контейнеры
+# -------------------------
+# локальные dev файлы
+Dockerfile.dev
+docker-compose.override.yml
+docker-compose.local.yml
+*.dockerignore
+# docker volumes, overrides, generated files
+docker-compose.*.yml
+# иногда temporary images or metadata
+docker-*.log
+
+# -------------------------
+# Terraform / инфраструктура
+# -------------------------
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+override.tf
+override.tf.json
+crash.log
+*.tfplan
+.terraform.lock.hcl
+
+# -------------------------
+# Kubernetes / облако
+# -------------------------
+# kubeconfig личный
+.kube/
+.kubeconfig
+*.kube
+# GCP/AWS creds
+*.gcloud/
+credentials.json
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*.pfx
+service_account.json
+.netrc
+
+# -------------------------
+# CI / CD / GitHub Actions
+# -------------------------
+# workflow run artifacts / caches
+.github/actions/cache/
+# local runner files
+.githooks/
+# temporary CI artifacts
+ci-artifacts/
+artifacts/
+
+# -------------------------
+# Python specifics
+# -------------------------
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.env.*
+.venv/
+venv/
+venv.bak/
+ENV/
+env/
+env.bak/
+.pyenv/
+pyvenv.cfg
+pip-selfcheck.json
+
+# Packaging / distributions
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+coverage/
+lcov.info
+
+# C extensions and build
+*.so
+*.dylib
+*.pyd
+cython_debug/
+
+# Jupyter
+.ipynb_checkpoints/
+# (не игнорируем сами ipynb, если это артефакт проекта — но checkpoints точно)
+# Spyder
+.spyderproject
+.spyproject
+
+# Sphinx
+docs/_build/
+
+# Type checkers / caches
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.pyright/
+.pyre_check/
+.pyre_configuration/
+.pyre/
+
+# Packaging tools locks / configs (решай сам, комментирую рекоменд.)
+# Pipenv
+Pipfile.lock
+Pipfile
+# Poetry
+poetry.lock
+# PDM
+.pdm.toml
+.pdm-python
+.pdm-build/
+pdm.lock
+__pypackages__/
+
+# Pip wheel metadata & caches
+pip-wheel-metadata/
+pip-log.txt
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Django / Flask specifics
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+media/
+staticfiles/
+
+# -------------------------
+# Go specifics
+# -------------------------
+# Binaries and build outputs
+# ignore bin/ and pkg/ at repo root (common)
+bin/
+pkg/
+out/
+build/
+dist/
+debug/
+tmp/
+*.test
+
+# Module cache (GOMODCACHE) — обычно не в репо, но на всякий
+$GOPATH/pkg/
+$GOPATH/bin/
+# go work file (optional ignore)
+go.work
+# IDE specific
+.goland/
+
+# Go vendor (if you DO commit vendor, закомментируй)
+vendor/
+
+# Go coverage / profiling
+*.cover
+*.coverprofile
+*.prof
+*.pprof
+*.trace
+
+# golangci-lint and other tool caches
+.golangci.yml
+.golangci-lint
+.cache/golangci-lint
+.gocache/
+.gomodcache/
+gopls.cache/
+.gopls/
+
+# dep / glide / godep
+Gopkg.lock
+Gopkg.toml
+glide.lock
+Godeps/
+Godeps/_workspace/
+
+# -------------------------
+# Common build & IDE artifacts
+# -------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+*.class
+*.project
+*.settings/
+.vscode/
+.settings/
+
+# EditorConfig (if you don't share it)
+*.editorconfig
+
+# -------------------------
+# Secrets & credentials
+# -------------------------
+# ignore all typical env files but keep examples
+.env*
+!.env.example
+!.env.sample
+*.secret
+*.credentials
+credentials.json
+secrets.yaml
+secrets.yml
+*.key
+*.pem
+*.crt
+*.cert
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+id_dsa
+id_dsa.pub
+ssh_config
+known_hosts
+
+# -------------------------
+# Databases / local data
+# -------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.sqlite3-journal
+dump.rdb
+*.bak
+*.sqlite-shm
+*.sqlite-wal
+
+# -------------------------
+# Misc caches & temporary
+# -------------------------
+.cache/
+tmp/
+temp/
+.venv/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.temp
+*.bak
+*.orig
+*~.nib
+*.cache
+.vagrant/
+.vagrant.d/
+
+# -------------------------
+# Editor plugin / language server caches
+# -------------------------
+# Metals, rust, typescript, etc.
+.metals
+target/
+Cargo.lock
+Cargo.toml.orig
+
+# -------------------------
+# Optional: add patterns you might need for specific tools
+# -------------------------
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+# Azure Pipelines
+.azure-pipelines/
+# Google Cloud Functions / serverless framework
+.serverless/
+# Heroku
+.heroku/
+# AWS SAM
+.aws-sam/
+
+# -------------------------
+# Project-specific / overrides
+# -------------------------
+my docs
+
+# =========================
+# Конец
+# =========================

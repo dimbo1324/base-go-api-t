@@ -1,159 +1,178 @@
-
 # Base Go API Engine
 
-A robust, modular, and scalable foundation for building RESTful APIs using **Go (Golang)** and **PostgreSQL**. This project implements a clean architecture pattern, separating configuration, database storage, and HTTP transport layers.
+[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.3-316192?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![License](https://img.shields.io/badge/License-Free_to_Use-green.svg)](LICENSE)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/dimbo1324)
+
+> **A robust, modular, and scalable foundation for building RESTful APIs with Go (Golang) and PostgreSQL.**
 
 ---
 
-### 🌐 Documentation Translations
+### 🌐 Documentation / Документация / Documentación
 
-* [🇷🇺 Русский (Russian)](./docs/ReadmeRus.md)
-* [🇪🇸 Español (Spanish)](./docs/ReadmeSp.md)
+* 🇷🇺 [**Russian (Русский)**](docs/ReadmeRus.md)
+* 🇪🇸 [**Spanish (Español)**](docs/ReadmeSp.md)
 
 ---
 
-## ✨ Features
+## 📖 Overview
 
-* **Modular Architecture**: Clean separation of concerns (CMD, Internal, Components, Store).
-* 
-**High-Performance Routing**: Built on top of [chi v5](https://github.com/go-chi/chi), a lightweight and idiomatic router.
+**Base Go API Engine** is a production-ready template designed to jumpstart your backend development. It implements a clean architecture pattern, separating concerns between configuration, database management, and business logic.
 
+Whether you are learning Go or building a complex microservice, this engine provides the essential plumbing—database connections, configuration management, and routing—so you can focus on building features.
 
-* **Database Management**:
-* PostgreSQL 16.3 integration via Docker.
+### ✨ Key Features
 
+* **Modular Architecture:** Clean separation of `cmd`, `internal`, and `components`.
+* **High-Performance Routing:** Built on top of `chi` v5 for lightweight and idiomatic routing.
+* **PostgreSQL Integration:** Pre-configured with connection pooling and `citext` extension support.
+* **Docker Ready:** Includes a `docker-compose.yml` for instant database setup.
+* **Smart Configuration:** robust environment variable management with sensible defaults.
+* **Scalable Store Pattern:** Ready-to-use interfaces for User and Post management.
 
-* Connection pooling configuration (Max Open/Idle connections, Idle time).
+---
 
+## 🛠️ Tech Stack
 
-* 
-`citext` extension support for case-insensitive email handling.
+* **Language:** [Go (Golang)](https://go.dev/)
+* **Database:** [PostgreSQL](https://www.postgresql.org/)
+* **Router:** [go-chi/chi](https://github.com/go-chi/chi)
+* **Driver:** [lib/pq](https://github.com/lib/pq)
+* **Containerization:** Docker & Docker Compose
 
-
-
-
-* **Middleware Stack**:
-* Request ID tagging.
-* Real IP resolution.
-* Structured Logging.
-* Panic Recovery.
-* Timeouts (60s global).
-
-
-
-
-* 
-**Environment Configuration**: Flexible config management with default fallback values.
-
-
-* **Data Models**:
-* **Users**: Storage logic for user management (Email, Username, Password).
-* **Posts**: Storage logic for blog-style posts with tagging support.
-
-
-
-## 🛠 Tech Stack
-
-* **Language**: Go 1.22+
-* **Database**: PostgreSQL 16.3
-* **Router**: go-chi/chi/v5
-* **Driver**: lib/pq
-* **Containerization**: Docker & Docker Compose
+---
 
 ## 🚀 Getting Started
 
+Follow these steps to get a local copy up and running.
+
 ### Prerequisites
 
-* **Go** (version 1.21 or higher installed)
-* **Docker** and **Docker Compose**
+* **Go**: Version 1.22 or higher installed on your machine.
+* **Docker Desktop**: For running the database container.
+* **Git**: To clone the repository.
 
-### Installation
+### 1. Clone the Repository
 
-1. **Clone the repository:**
 ```bash
-git clone https://github.com/dimbo1324/base-go-api-t.git
-cd base-go-api-t
+git clone [https://github.com/dimbo1324/Base-Go-API-Engine.git](https://github.com/dimbo1324/Base-Go-API-Engine.git)
+cd Base-Go-API-Engine
 
 ```
 
+### 2. Environment Configuration
 
-2. **Start the Database:**
-Use Docker Compose to spin up the PostgreSQL container.
+The application is designed to run out of the box with defaults, but you can customize it using Environment Variables.
+
+| Variable                | Description                | Default Value                                     |
+| ----------------------- | -------------------------- | ------------------------------------------------- |
+| `ADDR`                  | Server Address             | `:8080`                                           |
+| `DB_ADDR`               | Database Connection String | `postgres://postgres:password@localhost/appdb...` |
+| `DB_MAX_OPEN_CONNS`     | Max Open DB Connections    | `30`                                              |
+| `DB_MAX_IDLE_CONNS`     | Max Idle DB Connections    | `30`                                              |
+| `DB_MAX_IDLE_TIME_MINS` | Connection Max Lifetime    | `15m`                                             |
+
+### 3. Start the Database
+
+We use Docker Compose to spin up a PostgreSQL instance with the correct settings.
+
 ```bash
 docker-compose up -d
 
 ```
 
+*This starts a PostgreSQL container named `postgres-db` on port `5432`.*
 
-This will start a Postgres container named `postgres-db` on port `5432` with a persistent volume.
+### 4. Database Migration
 
+The project includes SQL migration files in `cmd/migrate/migrations`. You will need to apply these to create the `users` and `posts` tables.
 
-3. **Run Migrations:**
-*Ensure the database is initialized with the schemas provided in `cmd/migrate/migrations`.*
-The project includes SQL scripts to create the `users` and `posts` tables.
+You can execute the SQL files using a database tool (like DBeaver or pgAdmin) or via command line:
 
+```bash
+# Example using psql inside the container
+docker exec -it postgres-db psql -U postgres -d appdb -f /path/to/000001_create_users.up.sql
 
-4. **Run the Application:**
+```
+
+### 5. Run the Application
+
 ```bash
 go run cmd/api/main.go
 
 ```
 
-
-The server will start on the address defined in your configuration (default: `:8080`).
-
-
-
-## ⚙️ Configuration
-
-The application uses environment variables for configuration. If variables are not set, it falls back to hardcoded defaults defined in `internal/config/config.go`.
-
-| Variable | Default Value | Description              |
-| -------- | ------------- | ------------------------ |
-| `ADDR`   | `:8080`       | Server listening address |
-
- |
-| `DB_ADDR` | `postgres://...` | Database connection string 
-
- |
-| `DB_MAX_OPEN_CONNS` | `30` | Max open DB connections |
-| `DB_MAX_IDLE_CONNS` | `30` | Max idle DB connections |
-| `DB_MAX_IDLE_TIME_MINS` | `15m` | Max connection idle time 
-
- |
-
-## 📂 Project Structure
+You should see the output:
 
 ```text
-base-go-api-t/
-├── cmd/
-│   ├── api/
-│   │   ├── components/     # App struct, router mounting, handlers
-│   │   └── main.go         # Entry point, dependency injection
-│   └── migrate/            # SQL migration files
-├── internal/
-│   ├── config/             # Configuration constants and keys
-│   ├── db/                 # Low-level database connection logic
-│   ├── env/                # Helper functions for reading env vars
-│   └── store/              # Repository pattern implementations (Users, Posts)
-├── scripts/
-│   └── initDb.sql          # Database initialization script
-├── docker-compose.yml      # Docker infrastructure definition
-└── go.mod                  # Go module definitions
+Server started on :8080
 
 ```
 
-## 📡 API Endpoints
+---
+
+## 📂 Project Structure
+
+The project follows the Standard Go Project Layout:
+
+```text
+Base-Go-API-Engine/
+├── cmd/
+│   ├── api/            # Main application entry point
+│   └── migrate/        # Database migration SQL scripts
+├── internal/
+│   ├── config/         # Configuration constants and defaults
+│   ├── db/             # Database connection logic
+│   ├── env/            # Environment variable helpers
+│   └── store/          # Data Access Layer (Repository Pattern)
+├── docker-compose.yml  # Docker services definition
+└── go.mod              # Go module dependencies
+
+```
+
+---
+
+## 🔌 API Endpoints
 
 ### System
 
-* `GET /v1/status`: Health check endpoint. Returns "OK: it works".
+| Method | Endpoint     | Description                                |
+| ------ | ------------ | ------------------------------------------ |
+| `GET`  | `/v1/status` | Health check to verify the API is running. |
 
+*Note: The User and Post logic is implemented in the `internal/store` package and ready to be connected to new HTTP handlers.*
 
+---
 
-*(Note: While the storage layer supports User and Post creation, specific HTTP handlers for these entities should be registered in `cmd/api/components/methods.go`).*
+## 🤝 Contributing
 
-## 📄 License
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-This project is open source.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is free to use.
+
+---
+
+## 📬 Contact
+
+If you have questions, suggestions, or just want to say hi, feel free to reach out!
+
+* **Author:** dimbo1324
+* **Telegram:** [@dimbo1324](https://t.me/dimbo1324)
+* **Email:** dimaprihodko180@gmail.com
+* **GitHub:** [github.com/dimbo1324](https://github.com/dimbo1324)
+
+---
+
+*Developed with ❤️ by dimbo1324*
 

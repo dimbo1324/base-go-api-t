@@ -24,12 +24,12 @@ Ya sea que estés aprendiendo Go o construyendo un microservicio complejo, este 
 
 ### ✨ Características Clave
 
-* [cite_start]**Arquitectura Modular:** Clara separación entre `cmd`, `internal` y `components`[cite: 3].
-* [cite_start]**Enrutamiento de Alto Rendimiento:** Construido sobre `chi` v5 para un enrutamiento ligero e idiomático[cite: 3].
-* [cite_start]**Integración con PostgreSQL:** Preconfigurado con pool de conexiones y soporte para la extensión `citext`[cite: 1, 5].
-* [cite_start]**Listo para Docker:** Incluye un `docker-compose.yml` para levantar la base de datos al instante[cite: 1].
-* [cite_start]**Configuración Inteligente:** Gestión robusta de variables de entorno con valores predeterminados sensatos[cite: 9].
-* [cite_start]**Patrón de Almacenamiento Escalable:** Interfaces listas para usar para la gestión de Usuarios (Users) y Publicaciones (Posts)[cite: 11, 12].
+* **Arquitectura Modular:** Clara separación entre `cmd`, `internal` y `components`
+* **Enrutamiento de Alto Rendimiento:** Construido sobre `chi` v5 para un enrutamiento ligero e idiomático
+* **Integración con PostgreSQL:** Preconfigurado con pool de conexiones y soporte para la extensión `citext`
+* **Listo para Docker:** Incluye un `docker-compose.yml` para levantar la base de datos al instante
+* **Configuración Inteligente:** Gestión robusta de variables de entorno con valores predeterminados sensatos
+* **Patrón de Almacenamiento Escalable:** Interfaces listas para usar para la gestión de Usuarios (Users) y Publicaciones (Posts)
 
 ---
 

@@ -1,12 +1,15 @@
 package store
 
-import (
-	"database/sql"
-)
+import "database/sql"
+
+type Storage struct {
+	Posts *PostStore
+	Users *UserStore
+}
 
 func NewStorage(db *sql.DB) Storage {
 	return Storage{
-		Posts: &PostStore{db},
-		Users: &UsersStore{db},
+		Posts: NewPostStore(db),
+		Users: NewUserStore(db),
 	}
 }

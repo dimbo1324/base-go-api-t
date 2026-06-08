@@ -1,178 +1,118 @@
 # Base Go API Engine
 
-[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org/)
+[![Go Version](https://img.shields.io/badge/Go-1.23-00ADD8?style=flat&logo=go)](https://go.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.3-316192?style=flat&logo=postgresql)](https://www.postgresql.org/)
-[![License](https://img.shields.io/badge/License-Free_to_Use-green.svg)](LICENSE)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/dimbo1324)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **A robust, modular, and scalable foundation for building RESTful APIs with Go (Golang) and PostgreSQL.**
+Minimal Go REST API starter with PostgreSQL, explicit configuration, safe database connection handling, graceful shutdown, and a small testable HTTP layer.
 
----
+This project is intentionally small. It is designed as a clean backend foundation, not as a full production platform with authentication, authorization, observability, background workers, or generated clients.
 
-### 🌐 Documentation / Документация / Documentación
+## Features
 
-* 🇷🇺 [**Russian (Русский)**](docs/ReadmeRus.md)
-* 🇪🇸 [**Spanish (Español)**](docs/ReadmeSp.md)
+- Standard-library HTTP server and routing.
+- PostgreSQL access through `database/sql` and `lib/pq`.
+- Explicit environment-based configuration with safe defaults.
+- Graceful shutdown on `SIGINT` and `SIGTERM`.
+- Request logging without query strings or secrets.
+- Central JSON response helpers.
+- Simple store layer for users and posts.
+- SQL migrations for PostgreSQL.
+- Unit tests for configuration and the status endpoint.
+- GitHub Actions workflow for formatting, vetting, and tests.
 
----
+## Requirements
 
-## 📖 Overview
+- Go 1.23+
+- PostgreSQL 16+
+- Docker Compose, optional, for local PostgreSQL
+- `golang-migrate`, optional, for running the provided migrations through `make`
 
-**Base Go API Engine** is a production-ready template designed to jumpstart your backend development. It implements a clean architecture pattern, separating concerns between configuration, database management, and business logic.
-
-Whether you are learning Go or building a complex microservice, this engine provides the essential plumbing—database connections, configuration management, and routing—so you can focus on building features.
-
-### ✨ Key Features
-
-* **Modular Architecture:** Clean separation of `cmd`, `internal`, and `components`.
-* **High-Performance Routing:** Built on top of `chi` v5 for lightweight and idiomatic routing.
-* **PostgreSQL Integration:** Pre-configured with connection pooling and `citext` extension support.
-* **Docker Ready:** Includes a `docker-compose.yml` for instant database setup.
-* **Smart Configuration:** robust environment variable management with sensible defaults.
-* **Scalable Store Pattern:** Ready-to-use interfaces for User and Post management.
-
----
-
-## 🛠️ Tech Stack
-
-* **Language:** [Go (Golang)](https://go.dev/)
-* **Database:** [PostgreSQL](https://www.postgresql.org/)
-* **Router:** [go-chi/chi](https://github.com/go-chi/chi)
-* **Driver:** [lib/pq](https://github.com/lib/pq)
-* **Containerization:** Docker & Docker Compose
-
----
-
-## 🚀 Getting Started
-
-Follow these steps to get a local copy up and running.
-
-### Prerequisites
-
-* **Go**: Version 1.22 or higher installed on your machine.
-* **Docker Desktop**: For running the database container.
-* **Git**: To clone the repository.
-
-### 1. Clone the Repository
+## Quick start
 
 ```bash
-git clone [https://github.com/dimbo1324/Base-Go-API-Engine.git](https://github.com/dimbo1324/Base-Go-API-Engine.git)
+git clone https://github.com/dimbo1324/Base-Go-API-Engine.git
 cd Base-Go-API-Engine
-
+cp .env.example .env
+docker compose up -d
+make migrate-up
+go run ./cmd/api
 ```
 
-### 2. Environment Configuration
-
-The application is designed to run out of the box with defaults, but you can customize it using Environment Variables.
-
-| Variable                | Description                | Default Value                                     |
-| ----------------------- | -------------------------- | ------------------------------------------------- |
-| `ADDR`                  | Server Address             | `:8080`                                           |
-| `DB_ADDR`               | Database Connection String | `postgres://postgres:password@localhost/appdb...` |
-| `DB_MAX_OPEN_CONNS`     | Max Open DB Connections    | `30`                                              |
-| `DB_MAX_IDLE_CONNS`     | Max Idle DB Connections    | `30`                                              |
-| `DB_MAX_IDLE_TIME_MINS` | Connection Max Lifetime    | `15m`                                             |
-
-### 3. Start the Database
-
-We use Docker Compose to spin up a PostgreSQL instance with the correct settings.
+Check the API:
 
 ```bash
-docker-compose up -d
-
+curl http://localhost:8080/v1/status
 ```
 
-*This starts a PostgreSQL container named `postgres-db` on port `5432`.*
+Expected response:
 
-### 4. Database Migration
-
-The project includes SQL migration files in `cmd/migrate/migrations`. You will need to apply these to create the `users` and `posts` tables.
-
-You can execute the SQL files using a database tool (like DBeaver or pgAdmin) or via command line:
-
-```bash
-# Example using psql inside the container
-docker exec -it postgres-db psql -U postgres -d appdb -f /path/to/000001_create_users.up.sql
-
+```json
+{"status":"ok"}
 ```
 
-### 5. Run the Application
+## Configuration
 
-```bash
-go run cmd/api/main.go
+The application works with defaults, but local configuration should be placed in `.env`. Keep real secrets out of Git.
 
-```
+| Variable | Description | Default |
+| --- | --- | --- |
+| `ADDR` | HTTP server address | `:8080` |
+| `DB_ADDR` | PostgreSQL connection string | `postgres://postgres:password@localhost/appdb?sslmode=disable` |
+| `DB_MAX_OPEN_CONNS` | Maximum open DB connections | `30` |
+| `DB_MAX_IDLE_CONNS` | Maximum idle DB connections | `30` |
+| `DB_MAX_IDLE_TIME` | Maximum idle connection lifetime | `15m` |
+| `DB_MIGRATOR_ADDR` | Migration connection string used by `make migrate-up/down` | same local PostgreSQL DSN |
 
-You should see the output:
+`DB_MAX_IDLE_TIME_MINS` is still accepted as a legacy fallback, but new configuration should use `DB_MAX_IDLE_TIME`.
+
+## Project structure
 
 ```text
-Server started on :8080
-
-```
-
----
-
-## 📂 Project Structure
-
-The project follows the Standard Go Project Layout:
-
-```text
-Base-Go-API-Engine/
+.
 ├── cmd/
-│   ├── api/            # Main application entry point
-│   └── migrate/        # Database migration SQL scripts
+│   ├── api/                    # Application entry point
+│   └── migrate/migrations/     # SQL migrations
 ├── internal/
-│   ├── config/         # Configuration constants and defaults
-│   ├── db/             # Database connection logic
-│   ├── env/            # Environment variable helpers
-│   └── store/          # Data Access Layer (Repository Pattern)
-├── docker-compose.yml  # Docker services definition
-└── go.mod              # Go module dependencies
-
+│   ├── config/                 # Environment config loading and validation
+│   ├── db/                     # PostgreSQL connection setup
+│   ├── httpapi/                # HTTP server, routes, middleware, responses
+│   └── store/                  # Database models and persistence logic
+├── docs/                       # Additional project documentation
+├── .github/workflows/          # CI checks
+├── docker-compose.yml          # Local PostgreSQL
+├── Makefile                    # Common development commands
+└── go.mod
 ```
 
----
+## API
 
-## 🔌 API Endpoints
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/v1/status` | API status check |
 
-### System
+## Development commands
 
-| Method | Endpoint     | Description                                |
-| ------ | ------------ | ------------------------------------------ |
-| `GET`  | `/v1/status` | Health check to verify the API is running. |
+```bash
+go test ./...
+go vet ./...
+make fmt
+make fmt-check
+make migrate-up
+make migrate-down
+```
 
-*Note: The User and Post logic is implemented in the `internal/store` package and ready to be connected to new HTTP handlers.*
+## Design boundaries
 
----
+This starter deliberately does not include authentication, authorization, ORM, code generation, Docker images for the API, Kubernetes, background jobs, metrics, tracing, or a frontend. Add those only when the real application needs them.
 
-## 🤝 Contributing
+## Documentation
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+- [Architecture](docs/ARCHITECTURE.md)
+- [Development guide](docs/DEVELOPMENT.md)
+- [Russian README](docs/ReadmeRus.md)
+- [Spanish README](docs/ReadmeSp.md)
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## License
 
----
-
-## 📜 License
-
-This project is free to use.
-
----
-
-## 📬 Contact
-
-If you have questions, suggestions, or just want to say hi, feel free to reach out!
-
-* **Author:** dimbo1324
-* **Telegram:** [@dimbo1324](https://t.me/dimbo1324)
-* **Email:** dimaprihodko180@gmail.com
-* **GitHub:** [github.com/dimbo1324](https://github.com/dimbo1324)
-
----
-
-*Developed with ❤️ by dimbo1324*
-
+MIT. See [LICENSE](LICENSE).
